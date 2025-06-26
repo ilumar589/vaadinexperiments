@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "task")
 public record Task(
         @Nullable @Id Long id,
+        @NullMarked Long categoryId,
         @Nullable @Size(max = DESCRIPTION_MAX_LENGTH) String description,
         @NullMarked Instant creationDate,
         @Nullable LocalDate dueDate) {

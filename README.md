@@ -6,6 +6,8 @@ docker-compose up -d
 
 mvn flyway:migrate
 
+http://localhost:8080/swagger-ui.html
+~~~~
 
 
 To start the application in development mode, import it into your IDE and run the `Application` class. 

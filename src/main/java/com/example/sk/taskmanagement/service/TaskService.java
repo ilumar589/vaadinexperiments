@@ -30,7 +30,7 @@ public class TaskService {
         if ("fail".equals(description)) {
             throw new RuntimeException("This is for testing the error handler");
         }
-        final var task = new Task(null, description, Instant.now(), dueDate);
+        final var task = new Task(null, 1L, description, Instant.now(), dueDate);
         taskRepository.save(task);
     }
 
