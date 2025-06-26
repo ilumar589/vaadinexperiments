@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,11 +30,8 @@ public class TaskService {
         if ("fail".equals(description)) {
             throw new RuntimeException("This is for testing the error handler");
         }
-        var task = new Task();
-        task.setDescription(description);
-        task.setCreationDate(clock.instant());
-        task.setDueDate(dueDate);
-        taskRepository.saveAndFlush(task);
+        final var task = new Task(null, description, Instant.now(), dueDate);
+        taskRepository.save(task);
     }
 
     public List<Task> list(Pageable pageable) {

@@ -44,8 +44,8 @@ class TaskServiceIT {
         var due = LocalDate.of(2025, 2, 7);
         taskService.createTask("Do this", due);
         assertThat(taskService.list(PageRequest.ofSize(1))).singleElement()
-                .matches(task -> task.getDescription().equals("Do this") && due.equals(task.getDueDate())
-                        && task.getCreationDate().isAfter(now));
+                .matches(task -> task.description().equals("Do this") && due.equals(task.dueDate())
+                        && task.creationDate().isAfter(now));
     }
 
     @Test

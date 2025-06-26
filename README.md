@@ -2,6 +2,12 @@
 
 - [ ] TODO Replace or update this README with instructions relevant to your application
 
+docker-compose up -d
+
+mvn flyway:migrate
+
+
+
 To start the application in development mode, import it into your IDE and run the `Application` class. 
 You can also start the application from the command line by running: 
 
