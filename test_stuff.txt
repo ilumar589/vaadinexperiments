@@ -1,0 +1,17 @@
+1. Invoke-RestMethod -Uri "http://localhost:8080/api/report/category-tasks" -Method Get | ConvertTo-Json -Depth 10
+
+2. $json = @'
+   {
+     "name": "Test Category",
+     "tasks": [
+       { "description": "First task", "dueDate": "2025-07-01" },
+       { "description": "Second task", "dueDate": "2025-07-02" }
+     ]
+   }
+   '@
+
+   Invoke-RestMethod -Uri "http://localhost:8080/api/report/category-tasks" `
+                     -Method Post `
+                     -Body $json `
+                     -ContentType "application/json" | ConvertTo-Json -Depth 10
+
