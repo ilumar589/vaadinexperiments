@@ -10,6 +10,8 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Route("person-editor")
 @PageTitle("Person Editor")
@@ -17,18 +19,14 @@ import jakarta.annotation.security.PermitAll;
 @PermitAll // When security is enabled, allow all authenticated users
 public final class PersonEditorView extends Main {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(PersonEditorView.class);
+
     // data model
     private final BusinessPerson businessPerson;
 
     // view components
     private final PersonEditor editor1;
     private final PersonEditor editor2;
-    private final VerticalLayout layout1;
-    private final VerticalLayout layout2;
-    private final HorizontalLayout buttonsLayout;
-    private final HorizontalLayout editorsSideBySideLayout;
-    private final Button saveButton;
-    private final Button resetButton;
 
     public PersonEditorView() {
         this.businessPerson = new BusinessPerson();
@@ -36,22 +34,23 @@ public final class PersonEditorView extends Main {
         this.editor2 = new PersonEditor(true);
 
         // the editor and buttons
-        layout1 = new VerticalLayout();
-        layout2 = new VerticalLayout();
-        buttonsLayout = new HorizontalLayout();
-        editorsSideBySideLayout = new HorizontalLayout();
+        final var layout1 = new VerticalLayout();
+        final var layout2 = new VerticalLayout();
+        final var buttonsLayout = new HorizontalLayout();
+        final var editorsSideBySideLayout = new HorizontalLayout();
 
-        saveButton = new Button("Save");
+        Button saveButton = new Button("Save");
         saveButton.addClickListener(event -> {
             try {
+                LOGGER.info("Save button clicked");
                 editor1.getBinder().writeBean(businessPerson);
                 editor2.getBinder().readBean(businessPerson);
             } catch (com.vaadin.flow.data.binder.ValidationException e) {
-
+                LOGGER.error(e.getMessage());
             }
         });
 
-        resetButton = new Button("Reset");
+        Button resetButton = new Button("Reset");
         resetButton.addClickListener(event -> {
             editor1.getBinder().readBean(businessPerson);
         });

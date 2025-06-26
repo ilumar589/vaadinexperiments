@@ -23,7 +23,6 @@ public final class PersonEditor extends FormLayout {
         addFormItem(titleField, "Title");
         binder.bind(titleField, BusinessPerson::getTitle, BusinessPerson::setTitle);
         titleField.setReadOnly(readOnly);
-
     }
 
     public Binder<BusinessPerson> getBinder() {
