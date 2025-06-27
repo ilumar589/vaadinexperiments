@@ -28,8 +28,8 @@ public final class MainLayout extends AppLayout {
     MainLayout() {
         setPrimarySection(Section.DRAWER);
         addToDrawer(createHeader(),
-                createAdminSideNav(),
                 new Scroller(createSideNav()),
+                createAdminSideNav(),
                 createUserMenu());
     }
 
@@ -61,7 +61,7 @@ public final class MainLayout extends AppLayout {
         }
     }
 
-    private Component createAdminSideNav() {
+    private SideNav createAdminSideNav() {
         final var adminNav = new SideNav();
         adminNav.setLabel("Admin");
         adminNav.setCollapsible(true);
