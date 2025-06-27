@@ -1,5 +1,6 @@
 package com.example.sk.base.ui.view;
 
+import com.example.sk.administration.ui.AdminCategoriesView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -26,7 +27,10 @@ public final class MainLayout extends AppLayout {
 
     MainLayout() {
         setPrimarySection(Section.DRAWER);
-        addToDrawer(createHeader(), new Scroller(createSideNav()), createUserMenu());
+        addToDrawer(createHeader(),
+                createAdminSideNav(),
+                new Scroller(createSideNav()),
+                createUserMenu());
     }
 
     private Div createHeader() {
@@ -55,6 +59,18 @@ public final class MainLayout extends AppLayout {
         } else {
             return new SideNavItem(menuEntry.title(), menuEntry.path());
         }
+    }
+
+    private Component createAdminSideNav() {
+        final var adminNav = new SideNav();
+        adminNav.setLabel("Admin");
+        adminNav.setCollapsible(true);
+        adminNav.addItem(new SideNavItem("Categories admin", AdminCategoriesView.class,
+                VaadinIcon.GROUP.create()));
+//        adminNav.addItem(new SideNavItem("Permissions", PermissionsView.class,
+//                VaadinIcon.KEY.create()));
+
+        return adminNav;
     }
 
     private Component createUserMenu() {
