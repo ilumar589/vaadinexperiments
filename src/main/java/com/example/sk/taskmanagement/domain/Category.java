@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Set;
 
-@Table(name = "category")
+@Table(name = "category", schema = "task_mgmt")
 public record Category(
         @Nullable @Id Long id,
         @NullMarked String name,

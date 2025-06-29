@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 
-@Table(name = "task")
+@Table(name = "task", schema = "task_mgmt")
 public record Task(
         @Nullable @Id Long id,
         @NullMarked Long categoryId,

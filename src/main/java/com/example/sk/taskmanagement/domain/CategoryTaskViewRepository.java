@@ -16,8 +16,8 @@ public interface CategoryTaskViewRepository extends Repository<CategoryTaskView,
             t.description AS task_description,
             t.creation_date AS task_creation_date,
             t.due_date AS task_due_date
-        FROM category c
-        LEFT JOIN task t ON t.category_id = c.id
+        FROM task_mgmt.category c
+        LEFT JOIN task_mgmt.task t ON t.category_id = c.id
         ORDER BY c.id, t.id
         """)
     List<CategoryTaskView> findAllCategoryTasks();
