@@ -1,6 +1,6 @@
 package com.example.sk.base.ui.view;
 
-import com.example.sk.administration.ui.AdminCategoriesView;
+import com.example.sk.administration.database.ui.DbTablesAdminView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -65,7 +65,7 @@ public final class MainLayout extends AppLayout {
         final var adminNav = new SideNav();
         adminNav.setLabel("Admin");
         adminNav.setCollapsible(true);
-        adminNav.addItem(new SideNavItem("Categories admin", AdminCategoriesView.class,
+        adminNav.addItem(new SideNavItem("Db tables admin", DbTablesAdminView.class,
                 VaadinIcon.GROUP.create()));
 //        adminNav.addItem(new SideNavItem("Permissions", PermissionsView.class,
 //                VaadinIcon.KEY.create()));
