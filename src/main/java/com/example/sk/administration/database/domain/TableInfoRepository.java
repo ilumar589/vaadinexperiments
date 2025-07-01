@@ -20,7 +20,7 @@ public class TableInfoRepository {
 
     public @NonNull List<TableInfo> findAllBySchemaName(@NonNull final String schemaName) {
         try {
-            final var sql = SqlUtils.loadSql("db/get_table_info_by_schema.sql");
+            final var sql = SqlUtils.loadSql("db/administration/get_table_info_by_schema.sql");
             final var params = Map.of("schemaName", schemaName);
 
             return jdbcTemplate.query(sql, params, (row, _) -> {
