@@ -11,7 +11,7 @@ public final class SqlUtils {
 
     private SqlUtils() {}
 
-    private String loadSql(@NonNull String classPathLocation) throws IOException {
+    public static String loadSql(@NonNull String classPathLocation) throws IOException {
         final var resource = new ClassPathResource(classPathLocation);
         return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
     }

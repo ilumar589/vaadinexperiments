@@ -11,7 +11,7 @@ WITH fk_columns AS (
             JOIN information_schema.constraint_column_usage AS ccu
                  ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
     WHERE
-        tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'task_mgmt'
+        tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = :schemaName
 )
 SELECT
     c.table_name,
@@ -25,7 +25,7 @@ FROM
     fk_columns fk
     ON c.table_name = fk.source_table AND c.column_name = fk.source_column
 WHERE
-    c.table_schema = 'task_mgmt'
+    c.table_schema = :schemaName
 ORDER BY
     c.table_name, c.column_name;
 

@@ -1,15 +1,32 @@
 package com.example.sk.administration.database.ui;
 
+import com.example.sk.administration.database.domain.TableInfoRepository;
 import com.flowingcode.vaadin.addons.orgchart.OrgChart;
 import com.flowingcode.vaadin.addons.orgchart.OrgChartItem;
 import com.flowingcode.vaadin.addons.orgchart.extra.TemplateLiteralRewriter;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public final class TablesView extends VerticalLayout {
 
-    public TablesView() {
+    private static final Logger log = LoggerFactory.getLogger(TablesView.class);
+    private final TableInfoRepository tableInfoRepository;
+
+    public TablesView(TableInfoRepository tableInfoRepository) {
+
+
+        this.tableInfoRepository = tableInfoRepository;
+
+        final var tableInfo = tableInfoRepository.findAllBySchemaName("task_mgmt");
+
+        for (int i = 0; i < tableInfo.size(); i++) {
+            log.info("table info {}, data {}", i, tableInfo.get(i));
+
+        }
+
         OrgChart component = getOrgChartData();
         String nodeTemplate =
                 "<div class='title'>"
