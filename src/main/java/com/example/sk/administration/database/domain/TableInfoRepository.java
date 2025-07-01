@@ -1,8 +1,12 @@
 package com.example.sk.administration.database.domain;
 
-import com.example.sk.SqlUtils;
+import com.example.sk.utils.sql.LoadSqlError;
+import com.example.sk.utils.sql.LoadSqlSuccess;
+import com.example.sk.utils.sql.SqlUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +19,9 @@ import java.util.Map;
 @Repository
 public class TableInfoRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(TableInfoRepository.class);
+
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public TableInfoRepository(NamedParameterJdbcTemplate jdbcTemplate) {
@@ -22,14 +29,21 @@ public class TableInfoRepository {
     }
 
     public @NonNull List<TableInfo> findAllBySchemaName(@NonNull final String schemaName) {
-        try {
-            final var sql = SqlUtils.loadSql("db/administration/get_table_info_by_schema.sql");
-            final var params = Map.of("schemaName", schemaName);
+        final var sqlResult = SqlUtils.loadSql("db/administration/get_table_info_by_schema.sql");
 
-            return jdbcTemplate.query(sql, params, (row, _) -> getTableInfo(row));
-            
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        switch (sqlResult) {
+            case null -> {
+                log.error("Invalid state, no sql result in get_table_info_by_schema.sql usage");
+                return List.of();
+            }
+            case LoadSqlError(IOException err) -> {
+                log.error("Failed to load sql result", err);
+                return List.of();
+            }
+            case LoadSqlSuccess(String sqlString) -> {
+                final var params = Map.of("schemaName", schemaName);
+                return jdbcTemplate.query(sqlString, params, (row, _) -> getTableInfo(row));
+            }
         }
     }
 
