@@ -1,14 +1,18 @@
 package com.example.sk.administration.database.ui;
 
+import com.example.sk.administration.database.domain.TableInfo;
 import com.example.sk.administration.database.domain.TableInfoRepository;
 import com.flowingcode.vaadin.addons.orgchart.OrgChart;
 import com.flowingcode.vaadin.addons.orgchart.OrgChartItem;
 import com.flowingcode.vaadin.addons.orgchart.extra.TemplateLiteralRewriter;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class TablesView extends VerticalLayout {
 
@@ -20,20 +24,15 @@ public final class TablesView extends VerticalLayout {
 
         this.tableInfoRepository = tableInfoRepository;
 
-        final var tableInfo = tableInfoRepository.findAllBySchemaName("task_mgmt");
-
-        for (int i = 0; i < tableInfo.size(); i++) {
-            log.info("table info {}, data {}", i, tableInfo.get(i));
-
-        }
-
-        OrgChart component = getOrgChartData();
+//        OrgChart component = getOrgChartData();
+        OrgChart component = generateChartBasedOnExistingTables();
         String nodeTemplate =
                 "<div class='title'>"
-                        + "${item.data.imageUrl?`<img src=${item.data.imageUrl}></img>`:''}"
                         + "${item.title}</div>"
                         + "<div class='middle content'>${item.name}</div>"
-                        + "${item.data.mail?`<div class='custom content'>${item.data.mail}</div>`:''}";
+                        + "<div class='middle content'>${item.column}</div>"
+                        + "<div class='middle content'>${item.column_type}</div>";
+//                        + "${item.data.mail?`<div class='custom content'>${item.data.mail}</div>`:''}";
         component.setNodeTemplate("item", TemplateLiteralRewriter.rewriteFunction(nodeTemplate));
         component.addClassNames("chart-container", "image-title-demo");
 
@@ -47,8 +46,45 @@ public final class TablesView extends VerticalLayout {
         add(component);
     }
 
+    private @NonNull OrgChart generateChartBasedOnExistingTables() {
+        final List<TableInfo> tableInfo = tableInfoRepository.findAllBySchemaName("task_mgmt");
 
-    private OrgChart getOrgChartData() {
+        // group data by table name
+        final Map<String, List<TableInfo>> tableNameToTableInfo = tableInfo
+                .stream()
+                .collect(Collectors.groupingBy(TableInfo::tableName));
+
+
+        final var rootChartItem = new OrgChartItem(1, "", "Root");
+        for (int i = 0; i < tableNameToTableInfo.size(); i++) {
+            final String tableName = tableInfo.get(i).tableName();
+            final List<TableInfo> tableDataByName = tableNameToTableInfo.get(tableName);
+
+            final var tableChartItem = createTableItem(tableName,
+                    tableDataByName,
+                    i + 2);
+
+            rootChartItem.addChildren(tableChartItem);
+        }
+
+        return new OrgChart(rootChartItem);
+    }
+
+    private @NonNull OrgChartItem createTableItem(@NonNull String tableName,
+                                                  @NonNull List<TableInfo> tableInfo,
+                                                  int index) {
+
+        final var item = new OrgChartItem(index, "", tableName);
+
+        tableInfo.forEach(info -> {
+            item.setData("column",      info.columnName());
+            item.setData("column_type", info.dataType());
+        });
+
+        return item;
+    }
+
+    private @NonNull OrgChart getOrgChartData() {
         OrgChartItem item1 = new OrgChartItem(1, "John Williams", "Director");
         item1.setData("mail", "jwilliams@example.com");
         item1.setData("imageUrl", "images/users.png");

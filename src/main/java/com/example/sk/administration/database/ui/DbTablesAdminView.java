@@ -10,12 +10,9 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Db tables admin")
 public final class DbTablesAdminView extends Main {
 
-    private final TableInfoRepository tableInfoRepository;
-
     public DbTablesAdminView(TableInfoRepository tableInfoRepository) {
-        this.tableInfoRepository = tableInfoRepository;
 
         add(new ViewToolbar("Db tables admin", ViewToolbar.group()));
-        add(new TablesView(this.tableInfoRepository));
+        add(new TablesView(tableInfoRepository));
     }
 }

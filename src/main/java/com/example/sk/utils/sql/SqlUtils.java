@@ -11,7 +11,7 @@ public final class SqlUtils {
 
     private SqlUtils() {}
 
-    public static LoadSqlResult loadSql(@NonNull String classPathLocation) {
+    public static @NonNull LoadSqlResult loadSql(@NonNull String classPathLocation) {
         final var resource = new ClassPathResource(classPathLocation);
         try {
             final var sqlString = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
