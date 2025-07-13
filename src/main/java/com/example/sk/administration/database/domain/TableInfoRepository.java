@@ -32,10 +32,6 @@ public class TableInfoRepository {
         final var sqlResult = SqlUtils.loadSql("db/administration/get_table_info_by_schema.sql");
 
         switch (sqlResult) {
-            case null -> {
-                log.error("Invalid state, no sql result in get_table_info_by_schema.sql usage");
-                return List.of();
-            }
             case LoadSqlError(IOException err) -> {
                 log.error("Failed to load sql result", err);
                 return List.of();
