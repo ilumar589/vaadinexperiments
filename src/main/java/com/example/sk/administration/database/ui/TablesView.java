@@ -7,6 +7,7 @@ import com.flowingcode.vaadin.addons.orgchart.OrgChartItem;
 import com.flowingcode.vaadin.addons.orgchart.extra.TemplateLiteralRewriter;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public final class TablesView extends VerticalLayout {
                 "<div class='title'>"
                         + "${item.title}</div>"
                         + "<div class='middle content'>${item.name}</div>"
-                        + "<div class='middle content'>${item.data.column}</div>"
+//                        + "<div class='middle content'>${item.data.column}</div>"
                         + "<div class='middle content'>${item.data.column_type}</div>";
 //                        + "${item.data.mail?`<div class='custom content'>${item.data.mail}</div>`:''}";
         component.setNodeTemplate("item", TemplateLiteralRewriter.rewriteFunction(nodeTemplate));
@@ -56,31 +57,37 @@ public final class TablesView extends VerticalLayout {
 
 
         final var rootChartItem = new OrgChartItem(1, "", "Root");
-        for (int i = 0; i < tableNameToTableInfo.size(); i++) {
-            final String tableName = tableInfo.get(i).tableName();
-            final List<TableInfo> tableDataByName = tableNameToTableInfo.get(tableName);
+        rootChartItem.setData("column", "");
+        rootChartItem.setData("column_type", "");
 
-            final var tableChartItem = createTableItem(tableName,
-                    tableDataByName,
-                    i + 2);
+        tableNameToTableInfo.forEach((tableName, tableInfos) -> {
+            final var directChildIndex = rootChartItem.getChildren().size() + 1;
+            final var tableRootItem = new OrgChartItem(directChildIndex, "", tableName);
 
-            rootChartItem.addChildren(tableChartItem);
-        }
+            for (TableInfo tableDatum : tableInfos) {
+                final var childIndex = tableRootItem.getChildren().size() + 1;
+                final var columnChartItem = createTableItem(
+                        tableDatum,
+                        childIndex);
+
+                tableRootItem.addChildren(columnChartItem);
+            }
+
+            rootChartItem.addChildren(tableRootItem);
+        });
 
         return new OrgChart(rootChartItem);
     }
 
-    private @NonNull OrgChartItem createTableItem(@NonNull String tableName,
-                                                  @NonNull List<TableInfo> tableInfo,
+    @NullMarked
+    private OrgChartItem createTableItem(@NonNull TableInfo tableInfo,
                                                   int index) {
 
-        final var item = new OrgChartItem(index, "", tableName);
+        final var item = new OrgChartItem(index,
+                "",
+                tableInfo.columnName());
 
-        tableInfo.forEach(info -> {
-            item.setData("column",      info.columnName());
-            item.setData("column_type", info.dataType());
-        });
-
+        item.setData("column_type", tableInfo.dataType());
         return item;
     }
 
