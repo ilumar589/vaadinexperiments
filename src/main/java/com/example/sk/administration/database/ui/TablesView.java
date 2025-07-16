@@ -30,8 +30,8 @@ public final class TablesView extends VerticalLayout {
                 "<div class='title'>"
                         + "${item.title}</div>"
                         + "<div class='middle content'>${item.name}</div>"
-                        + "<div class='middle content'>${item.column}</div>"
-                        + "<div class='middle content'>${item.column_type}</div>";
+                        + "<div class='middle content'>${item.data.column}</div>"
+                        + "<div class='middle content'>${item.data.column_type}</div>";
 //                        + "${item.data.mail?`<div class='custom content'>${item.data.mail}</div>`:''}";
         component.setNodeTemplate("item", TemplateLiteralRewriter.rewriteFunction(nodeTemplate));
         component.addClassNames("chart-container", "image-title-demo");
