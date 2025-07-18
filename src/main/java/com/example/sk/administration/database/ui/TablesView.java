@@ -63,6 +63,8 @@ public final class TablesView extends VerticalLayout {
         tableNameToTableInfo.forEach((tableName, tableInfos) -> {
             final var directChildIndex = rootChartItem.getChildren().size() + 1;
             final var tableRootItem = new OrgChartItem(directChildIndex, "", tableName);
+            tableRootItem.setData("column", "");
+            tableRootItem.setData("column_type", "");
 
             for (TableInfo tableDatum : tableInfos) {
                 final var childIndex = tableRootItem.getChildren().size() + 1;
