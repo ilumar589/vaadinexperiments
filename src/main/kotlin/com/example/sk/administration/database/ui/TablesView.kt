@@ -46,8 +46,8 @@ class TablesView(private val tableInfoRepository: TableInfoRepository) : Vertica
         tableNameToTableInfo.forEach { (tableName, tableInfos) ->
             val directChildIndex = rootChartItem.children.size + 1
             val tableRootItem = OrgChartItem(directChildIndex, "", tableName).apply {
-                setData("column", "")
-                setData("column_type", "")
+                setData("column", "table")
+                setData("column_type", "table")
             }
 
             for (tableDatum in tableInfos) {

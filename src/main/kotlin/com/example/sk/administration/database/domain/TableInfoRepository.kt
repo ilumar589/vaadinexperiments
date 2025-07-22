@@ -27,7 +27,7 @@ class TableInfoRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) 
         }
     }
 
-    private fun getTableInfo(row: ResultSet): TableInfo {
+     private final fun getTableInfo(row: ResultSet): TableInfo {
         val tableName = row.getString("table_name")
         val columnName = row.getString("column_name")
         val dataType = row.getString("data_type")
