@@ -6,9 +6,7 @@ import com.example.sk.utils.sql.SqlUtils
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
-import java.io.IOException
 import java.sql.ResultSet
-import java.sql.SQLException
 
 @Repository
 class TableInfoRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
@@ -21,6 +19,7 @@ class TableInfoRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) 
                 log.error("Failed to load sql result", sqlResult.cause)
                 emptyList()
             }
+
             is LoadSqlSuccess -> {
                 val params = mapOf("schemaName" to schemaName)
                 jdbcTemplate.query(sqlResult.sqlString, params) { row, _ -> getTableInfo(row) }

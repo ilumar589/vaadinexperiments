@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController
 class ReportingController(private val reportingService: ReportingService) {
 
     @GetMapping("/category-tasks")
-    fun getCategoryTaskReport(): List<CategoryTaskView> {
+    final fun getCategoryTaskReport(): List<CategoryTaskView> {
         return reportingService.getAllCategoryTasksFlat()
     }
 
     @PostMapping("/category-tasks")
-    fun createCategoryWithTasks(@RequestBody request: CreateCategoryRequest): Category {
+    final fun createCategoryWithTasks(@RequestBody request: CreateCategoryRequest): Category {
         return reportingService.createCategoryWithTasks(request)
     }
 }
